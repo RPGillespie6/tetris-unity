@@ -308,7 +308,7 @@ public class Tetrimo : MonoBehaviour {
         else {
             if (State == TetrimoState.Falling) {
                 // After the Tetrimo has landed, the player can move it in the first 400ms.
-                this.audio.Play();
+                this.GetComponent<AudioSource>().Play();
                 State = TetrimoState.Landed;
                 yield return new WaitForSeconds(0.4f);
                 while (IsMovingHorizontal)  // Wait for end of possible MoveHorizontal - calls
@@ -397,7 +397,7 @@ public class Tetrimo : MonoBehaviour {
         newPreviewTetrimo.State = TetrimoState.Preview;
     }
     IEnumerator RotateTetrimo() {
-        this.audio.Play();
+        this.GetComponent<AudioSource>().Play();
 
         foreach (Transform child in transform) {
             Destroy(child.gameObject);
@@ -433,7 +433,7 @@ public class Tetrimo : MonoBehaviour {
 
             tmp.transform.Translate(transform.position);
             tmp.transform.parent = gameObject.transform;
-            tmp.renderer.material.color = Colors[ShapeIndex];
+            tmp.GetComponent<Renderer>().material.color = Colors[ShapeIndex];
         }
     }
     /// <summary>
@@ -482,7 +482,7 @@ public class Tetrimo : MonoBehaviour {
             for (int r = FieldSize.Bottom; r <= FieldSize.Top; r++) {
                 if (FieldMatrix[r, c] != null) {
                     FieldMatrix[r, c] = (GameObject) Instantiate(TetrimoPartPrefab, new Vector2(c,r), Quaternion.identity);
-                    FieldMatrix[r, c].renderer.material.color = Color.white;
+                    FieldMatrix[r, c].GetComponent<Renderer>().material.color = Color.white;
                 }
             }
         }
