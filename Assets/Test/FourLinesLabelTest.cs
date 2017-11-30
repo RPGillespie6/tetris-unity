@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.TestTools;
-using NUnit.Framework;
+using UnityEngine.Assertions;
 using System.Collections;
 
 public class FourLinesLabelTest {
@@ -24,7 +24,7 @@ public class FourLinesLabelTest {
         for (int i = 0; i < 10; i++)
             yield return new WaitForEndOfFrame();
 
-        Assert.Greater(go.transform.position.y, 0);
+        Assert.IsTrue(go.transform.position.y > 0);
     }
 
     // Checks to make sure label fades out every frame
@@ -47,7 +47,7 @@ public class FourLinesLabelTest {
         for (int i = 0; i < 10; i++)
             yield return new WaitForEndOfFrame();
 
-        Assert.Less(rend.material.color.a, 1);
+        Assert.IsTrue(rend.material.color.a < 1);
     }
 
     // Checks to make sure label destroys self
@@ -70,6 +70,6 @@ public class FourLinesLabelTest {
         for (int i = 0; i < 10; i++)
             yield return new WaitForEndOfFrame();
 
-        Assert.IsTrue(go == null);
+        Assert.IsNull(go);
     }
 }

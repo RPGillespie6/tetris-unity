@@ -36,7 +36,7 @@ public class GameOverCamera : MonoBehaviour {
         }
     }
 
-    private static Rect CreateCenteredRect(float width, float height, float y_offset =0) {
+    public static Rect CreateCenteredRect(float width, float height, float y_offset =0) {
         return new Rect((Screen.width - width) / 2, (Screen.height - height) / 2 + y_offset, width, height);
     }
 }
