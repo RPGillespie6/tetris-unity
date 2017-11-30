@@ -25,6 +25,7 @@ public class HighScoreTest {
         Assert.AreEqual(HighScore.get(0), 0);
         Assert.AreEqual(HighScore.get(1), 0);
         Assert.AreEqual(HighScore.get(2), 100);
+        Assert.AreEqual(PlayerPrefs.GetInt("HighScore#" + 2, 0), 100);
     }
 
     // Checks that high score object by default has 0 as scores
