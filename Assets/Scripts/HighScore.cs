@@ -8,7 +8,12 @@ public static class HighScore {
     /// <summary>
     /// HighScore Array must be sorted! With the #0-element has the lowest value.
     /// </summary>
-    static int[] Scores = new int[3] { 0, 0, 0};
+    static int[] Scores = new int[3] {0, 0, 0};
+
+    static public void clearScores() {
+        for (int i = 0; i < Scores.Length; i++)
+            Scores[i] = 0;
+    }
 
     static HighScore() {
         for (int i = 0; i < Scores.Length; i++)
