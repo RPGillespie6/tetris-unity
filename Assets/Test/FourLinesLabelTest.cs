@@ -7,7 +7,7 @@ public class FourLinesLabelTest {
 
     // Checks to make sure label moves up every frame
     [UnityTest]
-    public IEnumerator FourLinesLabel_MovesUp()
+    public IEnumerator FourLinesLabelTest_MovesUp()
     {
         var go = new GameObject();
         go.AddComponent<MeshRenderer>();
@@ -29,7 +29,7 @@ public class FourLinesLabelTest {
 
     // Checks to make sure label fades out every frame
     [UnityTest]
-    public IEnumerator FourLinesLabel_FadesOut()
+    public IEnumerator FourLinesLabelTest_FadesOut()
     {
         var go = new GameObject();
         go.AddComponent<MeshRenderer>();
@@ -52,7 +52,7 @@ public class FourLinesLabelTest {
 
     // Checks to make sure label destroys self
     [UnityTest]
-    public IEnumerator FourLinesLabel_DestroysSelf()
+    public IEnumerator FourLinesLabelTest_DestroysSelf()
     {
         var go = new GameObject();
         go.AddComponent<MeshRenderer>();

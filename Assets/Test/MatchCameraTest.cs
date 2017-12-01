@@ -8,7 +8,7 @@ public class MatchCameraTest {
 
     // Checks that match stats are set to correct defaults on new game
     [UnityTest]
-    public IEnumerator FourLinesLabel_MovesUp()
+    public IEnumerator MatchCameraTest_Defaults()
     {
         var go = new GameObject();
         go.AddComponent<MatchCamera>();
