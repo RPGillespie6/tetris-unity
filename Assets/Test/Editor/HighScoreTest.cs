@@ -1,8 +1,5 @@
-﻿using UnityEngine;
-using UnityEngine.TestTools;
-using UnityEngine.Assertions;
-using System.Collections;
-using Test = NUnit.Framework.TestAttribute;
+﻿using System.Collections;
+using NUnit.Framework;
 
 public class HighScoreTest {
 
@@ -25,7 +22,6 @@ public class HighScoreTest {
         Assert.AreEqual(HighScore.get(0), 0);
         Assert.AreEqual(HighScore.get(1), 0);
         Assert.AreEqual(HighScore.get(2), 100);
-        Assert.AreEqual(PlayerPrefs.GetInt("HighScore#" + 2, 0), 100);
     }
 
     // Checks that high score object by default has 0 as scores

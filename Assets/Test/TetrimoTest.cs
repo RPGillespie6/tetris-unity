@@ -14,10 +14,10 @@ public class TetrimoTest {
         // var t = go.GetComponent<Tetrimo>();
         // setupTetrimo(ref t);
         // t.State = Tetrimo.TetrimoState.Spawning;
-        t.TetrimoPartPrefab = Resources.Load("TetrimoPartPrefab") as GameObject;
-        t.TetrimoPrefab = Resources.Load("TetrimoPrefab") as GameObject;
+        t.TetrimoPartPrefab      = Resources.Load("TetrimoPartPrefab") as GameObject;
+        t.TetrimoPrefab          = Resources.Load("TetrimoPrefab") as GameObject;
         t.TetrimoExplosionPrefab = Resources.Load("TetrimoExplosionPrefab") as GameObject;
-        t.FourLinesLabelPrefab = Resources.Load("FourLinesLabelPrefab") as GameObject;
+        t.FourLinesLabelPrefab   = Resources.Load("FourLinesLabelPrefab") as GameObject;
     }
 
     //Checks that all of the tetris shapes are present and have their correct tetrimo positions and rotations

@@ -42,7 +42,7 @@ public class MatchCamera : MonoBehaviour {
         Scores               = 0;
         Level                = 1;
         Continuous           = 0;
-        Tetrimo.TetrimoCount = 1;
+        Tetrimo.TetrimoCount = 0;
     }
     #endregion
 }
