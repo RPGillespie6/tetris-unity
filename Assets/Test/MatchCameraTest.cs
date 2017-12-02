@@ -21,6 +21,6 @@ public class MatchCameraTest {
         Assert.AreEqual(MatchCamera.Scores, 0);     //Start game with score 0
         Assert.AreEqual(MatchCamera.Level, 1);      //Start game at level 1
         Assert.AreEqual(MatchCamera.Continuous, 0); //Start game with no streak
-        Assert.AreEqual((int) Tetrimo.TetrimoCount, 0);   //Start game with no block count
+        Assert.AreEqual((int) Tetrimo.TetrimoCount, 1);   //Start game at block count 1
     }
 }
