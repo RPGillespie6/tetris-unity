@@ -242,4 +242,106 @@ public class TetrimoTest {
         Assert.AreEqual((Vector2)go.transform.GetChild(3).transform.position, new Vector2(0, -1));
     }
 
+    //Checks line clearing function selects correct lines
+    [UnityTest]
+    public IEnumerator TetrimoTest_MoveHorizontal()
+    {
+        var go = new GameObject();
+        go.AddComponent<Tetrimo>();
+        var t = go.GetComponent<Tetrimo>();
+        setupTetrimo(ref t);
+        t.State = Tetrimo.TetrimoState.Spawning;
+        t.HorizontalSpeed = 10;
+        
+        yield return new WaitForEndOfFrame();
+
+        // Use reflection to access protected fields!
+        MethodInfo MoveHorizontal = typeof(Tetrimo).GetMethod("MoveHorizontal", BindingFlags.NonPublic | BindingFlags.Instance);
+        
+        t.testDirection = 1.0f; //right
+        Vector3 position = go.transform.position;
+        IEnumerator ie = (IEnumerator) MoveHorizontal.Invoke(t, null);
+        t.StartCoroutine(ie);
+
+        for (int i = 0; i < 10; i++)
+            yield return new WaitForEndOfFrame(); //Wait until block is finished moving
+
+        Debug.Log(position);
+        Debug.Log(go.transform.position);
+        Assert.IsTrue(position.x < go.transform.position.x);
+
+        t.testDirection = -1.0f; //left
+        position = go.transform.position;
+        ie = (IEnumerator)MoveHorizontal.Invoke(t, null);
+        t.StartCoroutine(ie);
+
+        for (int i = 0; i < 10; i++)
+            yield return new WaitForEndOfFrame(); //Wait until block is finished moving
+
+        Debug.Log(position);
+        Debug.Log(go.transform.position);
+        Assert.IsTrue(position.x > go.transform.position.x);
+    }
+
+    //Checks line clearing function selects correct lines
+    [Test]
+    public void TetrimoTest_LetLinesAboveFalling()
+    {
+        var go = new GameObject();
+        go.AddComponent<Tetrimo>();
+        var t = go.GetComponent<Tetrimo>();
+        setupTetrimo(ref t);
+        t.State = Tetrimo.TetrimoState.Spawning;
+
+        FieldInfo fi = typeof(Tetrimo).GetField("FieldMatrix", BindingFlags.NonPublic | BindingFlags.Static);
+        GameObject[,] FieldMatrix = (GameObject[,])fi.GetValue(null);
+
+        clearField(ref FieldMatrix);
+        for (int i = 0; i < FieldMatrix.GetLength(1); i++)
+            FieldMatrix[1, i] = go;   // Fill in line
+
+        for (int i = 0; i < FieldMatrix.GetLength(1); i++)
+        {
+            Assert.IsNotNull(FieldMatrix[1,i]);
+            Assert.IsNull(FieldMatrix[0,i]);
+        }
+
+        // Use reflection to access protected fields!
+        MethodInfo LetLinesAboveFalling = typeof(Tetrimo).GetMethod("LetLinesAboveFalling", BindingFlags.NonPublic | BindingFlags.Instance);
+        object[] parametersArray = new object[] { 1 };
+        LetLinesAboveFalling.Invoke(t, parametersArray);
+
+        for (int i = 0; i < FieldMatrix.GetLength(1); i++)
+        {
+            Assert.IsNull(FieldMatrix[1,i]);
+            Assert.IsNotNull(FieldMatrix[0,i]);
+        }
+
+        clearField(ref FieldMatrix);
+    }
+
+    //Checks line clearing function selects correct lines
+    [UnityTest]
+    public IEnumerator TetrimoTest_ActivateAndCreateNewPreview()
+    {
+        var go = new GameObject();
+        go.AddComponent<Tetrimo>();
+        var t = go.GetComponent<Tetrimo>();
+        setupTetrimo(ref t);
+        t.State = Tetrimo.TetrimoState.Preview;
+
+        //Wait for Start() to be called
+        yield return new WaitForEndOfFrame();
+
+        GameObject[] allObjects = UnityEngine.Object.FindObjectsOfType<GameObject>();
+        int num_objects = allObjects.Length;
+
+        // Use reflection to access protected fields!
+        MethodInfo ActivateAndCreateNewPreview = typeof(Tetrimo).GetMethod("ActivateAndCreateNewPreview", BindingFlags.NonPublic | BindingFlags.Instance);
+        ActivateAndCreateNewPreview.Invoke(t, null);
+
+        allObjects = UnityEngine.Object.FindObjectsOfType<GameObject>();
+        Assert.IsTrue(num_objects < allObjects.Length);
+    }
+
 }

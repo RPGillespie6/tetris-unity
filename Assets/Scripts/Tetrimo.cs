@@ -157,6 +157,7 @@ public class Tetrimo : MonoBehaviour {
             return true;
         }
     }
+
     bool CanMoveRight {
         get {
             bool canMoveRight = true;
@@ -166,6 +167,7 @@ public class Tetrimo : MonoBehaviour {
             return canMoveRight;
         }
     }
+
     bool CanMoveLeft {
         get {
             bool canMoveLeft = true;
@@ -175,6 +177,7 @@ public class Tetrimo : MonoBehaviour {
             return canMoveLeft;
         }
     }
+    
     bool CanRotate {
         get {
             // Iterate through each TetrimoParts
@@ -190,6 +193,16 @@ public class Tetrimo : MonoBehaviour {
             return true;
         }
     }
+
+    public float testDirection = 0.0f;
+    float MoveDirection {
+        get {
+            if (testDirection != 0.0f)
+                return testDirection;
+            return Input.GetAxis("Horizontal");
+        }
+    }
+
     #endregion
 
     #region Event Handler
@@ -255,9 +268,9 @@ public class Tetrimo : MonoBehaviour {
         }
 
         // Debugging Feature
-        if (Input.GetKeyDown(KeyCode.F2)) {
-            KillAndReload();
-        }
+        // if (Input.GetKeyDown(KeyCode.F2)) {
+        //     KillAndReload();
+        //}
     }
     #endregion
 
@@ -281,7 +294,7 @@ public class Tetrimo : MonoBehaviour {
         IsMovingHorizontal = true;
 
         float moved     = 0.0f;
-        float direction = Input.GetAxis("Horizontal");
+        float direction = this.MoveDirection;
 
         if ((this.CanMoveRight && direction > 0) || (this.CanMoveLeft && direction < 0)) {
             while (moved <= 1.0f) {
@@ -302,6 +315,7 @@ public class Tetrimo : MonoBehaviour {
 
         IsMovingHorizontal = false;
     }
+
     IEnumerator FallingDown() {
         if (this.CanMoveDown) {
             transform.Translate(Vector3.down, Space.World);
@@ -397,6 +411,7 @@ public class Tetrimo : MonoBehaviour {
         Tetrimo newPreviewTetrimo = newGameObject.GetComponent<Tetrimo>();
         newPreviewTetrimo.State = TetrimoState.Preview;
     }
+    
     IEnumerator RotateTetrimo() {
         this.GetComponent<AudioSource>().Play();
 
@@ -408,6 +423,7 @@ public class Tetrimo : MonoBehaviour {
         CreateShape();
         yield return 0;
     }
+
     void LetLinesAboveFalling(float lineToBegin) {
         int bottom = Mathf.RoundToInt(lineToBegin);
 
@@ -463,30 +479,30 @@ public class Tetrimo : MonoBehaviour {
     #endregion
 
     #region Debugging helper function
-    private void KillAndReload() {
-        for (int c = FieldSize.Left; c <= FieldSize.Right; c++) {
-            for (int r = FieldSize.Bottom; r <= FieldSize.Top; r++) {
-                if (FieldMatrix[r, c] != null) {
-                    Destroy(FieldMatrix[r, c]);
-                }
-            }
-        }
-        Tetrimo[] gameObjects = GetComponents<Tetrimo>();
-        foreach (Tetrimo go in gameObjects) {
-            if (go.State == TetrimoState.Falling)
-                continue;
+    // private void KillAndReload() {
+    //     for (int c = FieldSize.Left; c <= FieldSize.Right; c++) {
+    //         for (int r = FieldSize.Bottom; r <= FieldSize.Top; r++) {
+    //             if (FieldMatrix[r, c] != null) {
+    //                 Destroy(FieldMatrix[r, c]);
+    //             }
+    //         }
+    //     }
+    //     Tetrimo[] gameObjects = GetComponents<Tetrimo>();
+    //     foreach (Tetrimo go in gameObjects) {
+    //         if (go.State == TetrimoState.Falling)
+    //             continue;
 
-            Destroy(go.gameObject);
-        }
+    //         Destroy(go.gameObject);
+    //     }
 
-        for (int c = FieldSize.Left; c <= FieldSize.Right; c++) {
-            for (int r = FieldSize.Bottom; r <= FieldSize.Top; r++) {
-                if (FieldMatrix[r, c] != null) {
-                    FieldMatrix[r, c] = (GameObject) Instantiate(TetrimoPartPrefab, new Vector2(c,r), Quaternion.identity);
-                    FieldMatrix[r, c].GetComponent<Renderer>().material.color = Color.white;
-                }
-            }
-        }
-    }
+    //     for (int c = FieldSize.Left; c <= FieldSize.Right; c++) {
+    //         for (int r = FieldSize.Bottom; r <= FieldSize.Top; r++) {
+    //             if (FieldMatrix[r, c] != null) {
+    //                 FieldMatrix[r, c] = (GameObject) Instantiate(TetrimoPartPrefab, new Vector2(c,r), Quaternion.identity);
+    //                 FieldMatrix[r, c].GetComponent<Renderer>().material.color = Color.white;
+    //             }
+    //         }
+    //     }
+    // }
     #endregion
 }
