@@ -266,16 +266,17 @@ public class Tetrimo : MonoBehaviour {
     /// Active the Tetrimo in the preview hub
     /// </summary>
     /// <returns></returns>
-    IEnumerator ActivateTetrimoInPreview() {
-        yield return 0;
-    }
+    // IEnumerator ActivateTetrimoInPreview() {
+    //     yield return 0;
+    // }
     /// <summary>
     /// Create a new Tetrimo and place it in the preview hub.
     /// </summary>
     /// <returns></returns>
-    IEnumerator CreatePreviewStateTetrimo() {
-        yield return 0;
-    }
+    // IEnumerator CreatePreviewStateTetrimo() {
+    //     yield return 0;
+    // }
+    
     IEnumerator MoveHorizontal() {
         IsMovingHorizontal = true;
 

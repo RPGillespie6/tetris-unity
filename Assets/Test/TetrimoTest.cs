@@ -109,4 +109,29 @@ public class TetrimoTest {
         Assert.IsFalse((bool) CanMoveLeft.GetValue(t, null));
     }
 
+    //Checks if tetrimo can move down based on current position
+    [UnityTest]
+    public IEnumerator TetrimoTest_CanRotate()
+    {
+        var go = new GameObject();
+        go.AddComponent<Tetrimo>();
+        var t = go.GetComponent<Tetrimo>();
+        setupTetrimo(ref t);
+        t.State = Tetrimo.TetrimoState.Spawning;
+
+        //Wait for Start() to be called
+        yield return new WaitForEndOfFrame();
+        
+        // Use reflection to access protected fields!
+        PropertyInfo CanRotate = typeof(Tetrimo).GetProperty("CanRotate", BindingFlags.NonPublic | BindingFlags.Instance);
+
+        Assert.IsTrue((bool) CanRotate.GetValue(t, null));
+
+        //Move piece to left of screen
+        go.transform.Translate(10*Vector3.left, Space.World);
+        Assert.IsFalse((bool) CanRotate.GetValue(t, null));
+    }
+
+    
+
 }
