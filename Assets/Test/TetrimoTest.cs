@@ -15,6 +15,13 @@ public class TetrimoTest {
         t.FourLinesLabelPrefab   = Resources.Load("FourLinesLabelPrefab") as GameObject;
     }
 
+    private void clearField(ref GameObject[,] field)
+    {
+        for (int i = 0; i < field.GetLength(0); i++)
+            for (int j = 0; j < field.GetLength(1); j++)
+                field[i, j] = null;
+    }
+
     //Checks that all of the tetris shapes are present and have their correct tetrimo positions and rotations
     [Test]
     public void TetrimoTest_Shapes()
@@ -176,6 +183,9 @@ public class TetrimoTest {
         Assert.IsTrue(lines.Contains(18));
         Assert.IsTrue(lines.Contains(17));
         Assert.IsFalse(lines.Contains(16)); //Doesn't count if current piece is not part of the line to be cleared
+
+        //Make sure we undo what we did since this is a static member variable
+        clearField(ref FieldMatrix);
     }
 
     //Checks line clearing function selects correct lines
