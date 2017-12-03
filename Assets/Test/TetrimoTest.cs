@@ -35,6 +35,18 @@ public class TetrimoTest {
                 }
     }
 
+    //Checks that the playing field is 19x11
+    [Test]
+    public void TetrimoTest_Field()
+    {
+        // Use reflection to access protected fields!
+        FieldInfo fi = typeof(Tetrimo).GetField("FieldMatrix", BindingFlags.NonPublic | BindingFlags.Static);
+        GameObject[,] FieldMatrix = (GameObject[,])fi.GetValue(null);
+
+        Assert.AreEqual(FieldMatrix.GetLength(0), 19);
+        Assert.AreEqual(FieldMatrix.GetLength(1), 11);
+    }
+
     //Checks if tetrimo can move down based on current position
     [UnityTest]
     public IEnumerator TetrimoTest_CanMoveDown()
@@ -132,6 +144,38 @@ public class TetrimoTest {
         Assert.IsFalse((bool) CanRotate.GetValue(t, null));
     }
 
-    
+    //Checks if tetrimo can move down based on current position
+    [UnityTest]
+    public IEnumerator TetrimoTest_FindLines()
+    {
+        var go = new GameObject();
+        go.AddComponent<Tetrimo>();
+        var t = go.GetComponent<Tetrimo>();
+        setupTetrimo(ref t);
+        t.State = Tetrimo.TetrimoState.Spawning;
+
+        FieldInfo fi = typeof(Tetrimo).GetField("FieldMatrix", BindingFlags.NonPublic | BindingFlags.Static);
+        GameObject[,] FieldMatrix = (GameObject[,])fi.GetValue(null);
+
+        //Wait for Start() to be called
+        yield return new WaitForEndOfFrame();
+
+        for (int i = 0; i < FieldMatrix.GetLength(1); i++)
+        {
+            //Fill in top three lines of field with tetrimos
+            FieldMatrix[18,i] = go;   // #
+            FieldMatrix[17,i] = go;   // ###
+            FieldMatrix[16,i] = go;   // <-- Nothing in this line
+        }
+
+        // Use reflection to access protected fields!
+        MethodInfo FindLines = typeof(Tetrimo).GetMethod("FindLines", BindingFlags.NonPublic | BindingFlags.Instance);
+        ArrayList lines = (ArrayList) FindLines.Invoke(t, null);
+
+        Assert.AreEqual(lines.Count, 2);
+        Assert.IsTrue(lines.Contains(18));
+        Assert.IsTrue(lines.Contains(17));
+        Assert.IsFalse(lines.Contains(16)); //Doesn't count if current piece is not part of the line to be cleared
+    }
 
 }
