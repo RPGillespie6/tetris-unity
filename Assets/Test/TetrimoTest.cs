@@ -75,7 +75,7 @@ public class TetrimoTest {
         Assert.IsFalse((bool) CanMoveDown.GetValue(t, null));
     }
 
-    //Checks if tetrimo can move down based on current position
+    //Checks if tetrimo can move right based on current position
     [UnityTest]
     public IEnumerator TetrimoTest_CanMoveRight()
     {
@@ -98,7 +98,7 @@ public class TetrimoTest {
         Assert.IsFalse((bool) CanMoveRight.GetValue(t, null));
     }
 
-    //Checks if tetrimo can move down based on current position
+    //Checks if tetrimo can move left based on current position
     [UnityTest]
     public IEnumerator TetrimoTest_CanMoveLeft()
     {
@@ -121,7 +121,7 @@ public class TetrimoTest {
         Assert.IsFalse((bool) CanMoveLeft.GetValue(t, null));
     }
 
-    //Checks if tetrimo can move down based on current position
+    //Checks if tetrimo can rotate based on current position
     [UnityTest]
     public IEnumerator TetrimoTest_CanRotate()
     {
@@ -144,7 +144,7 @@ public class TetrimoTest {
         Assert.IsFalse((bool) CanRotate.GetValue(t, null));
     }
 
-    //Checks if tetrimo can move down based on current position
+    //Checks line clearing function selects correct lines
     [UnityTest]
     public IEnumerator TetrimoTest_FindLines()
     {
@@ -176,6 +176,60 @@ public class TetrimoTest {
         Assert.IsTrue(lines.Contains(18));
         Assert.IsTrue(lines.Contains(17));
         Assert.IsFalse(lines.Contains(16)); //Doesn't count if current piece is not part of the line to be cleared
+    }
+
+    //Checks line clearing function selects correct lines
+    [Test]
+    public void TetrimoTest_CreateShape()
+    {
+        var go = new GameObject();
+        go.AddComponent<Tetrimo>();
+        var t = go.GetComponent<Tetrimo>();
+        setupTetrimo(ref t);
+        t.State = Tetrimo.TetrimoState.Spawning;
+
+        Assert.AreEqual(go.transform.childCount, 0);
+
+        // Use reflection to access protected fields!
+        MethodInfo CreateShape = typeof(Tetrimo).GetMethod("CreateShape", BindingFlags.NonPublic | BindingFlags.Instance);
+        CreateShape.Invoke(t, null);
+        
+        Assert.AreEqual(go.transform.childCount, 4);
+        Assert.AreEqual((Vector2) go.transform.GetChild(0).transform.position, new Vector2(0,1)); // #
+        Assert.AreEqual((Vector2) go.transform.GetChild(1).transform.position, new Vector2(0,0)); // ###
+        Assert.AreEqual((Vector2) go.transform.GetChild(2).transform.position, new Vector2(1,0));
+        Assert.AreEqual((Vector2) go.transform.GetChild(3).transform.position, new Vector2(2,0));
+    }
+
+    //Checks line clearing function selects correct lines
+    [UnityTest]
+    public IEnumerator TetrimoTest_RotateTetrimo()
+    {
+        var go = new GameObject();
+        go.AddComponent<Tetrimo>();
+        go.AddComponent<AudioSource>();
+        var t = go.GetComponent<Tetrimo>();
+        setupTetrimo(ref t);
+        t.State = Tetrimo.TetrimoState.Spawning;
+
+        Assert.AreEqual(go.transform.childCount, 0);
+
+        // Use reflection to access protected fields!
+        MethodInfo CreateShape = typeof(Tetrimo).GetMethod("CreateShape", BindingFlags.NonPublic | BindingFlags.Instance);
+        MethodInfo RotateTetrimo = typeof(Tetrimo).GetMethod("RotateTetrimo", BindingFlags.NonPublic | BindingFlags.Instance);
+        CreateShape.Invoke(t, null);
+        Assert.AreEqual(go.transform.childCount, 4);
+        
+        IEnumerator ie = (IEnumerator) RotateTetrimo.Invoke(t, null);
+        yield return t.StartCoroutine(ie); //Wait until this is finished before proceeding
+
+        go.transform.position = Vector3.zero; //By now Start() has been called, so we need to cancel out its effects
+
+        Assert.AreEqual(go.transform.childCount, 4);
+        Assert.AreEqual((Vector2)go.transform.GetChild(0).transform.position, new Vector2(0, 1)); // ##
+        Assert.AreEqual((Vector2)go.transform.GetChild(1).transform.position, new Vector2(1, 1)); // #
+        Assert.AreEqual((Vector2)go.transform.GetChild(2).transform.position, new Vector2(0, 0)); // #
+        Assert.AreEqual((Vector2)go.transform.GetChild(3).transform.position, new Vector2(0, -1));
     }
 
 }
