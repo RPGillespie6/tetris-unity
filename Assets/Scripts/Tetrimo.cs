@@ -194,6 +194,7 @@ public class Tetrimo : MonoBehaviour {
         }
     }
 
+    //This wrapper is necessary to allow unit testing
     public float testDirection = 0.0f;
     float MoveDirection {
         get {

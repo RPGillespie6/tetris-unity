@@ -242,7 +242,7 @@ public class TetrimoTest {
         Assert.AreEqual((Vector2)go.transform.GetChild(3).transform.position, new Vector2(0, -1));
     }
 
-    //Checks line clearing function selects correct lines
+    //Checks that pressing left/right moves the piece left/right
     [UnityTest]
     public IEnumerator TetrimoTest_MoveHorizontal()
     {
@@ -281,6 +281,33 @@ public class TetrimoTest {
         Debug.Log(position);
         Debug.Log(go.transform.position);
         Assert.IsTrue(position.x > go.transform.position.x);
+    }
+
+    //Checks that falling pieces have the correct behavior
+    [UnityTest]
+    public IEnumerator TetrimoTest_FallingDown()
+    {
+        var go = new GameObject();
+        go.AddComponent<Tetrimo>();
+        var t = go.GetComponent<Tetrimo>();
+        setupTetrimo(ref t);
+        t.State = Tetrimo.TetrimoState.Spawning;
+        t.FallingCooldown = 1;
+        t.FallingSpeed = 1;
+
+        yield return new WaitForEndOfFrame();
+
+        // Use reflection to access protected fields!
+        MethodInfo FallingDown = typeof(Tetrimo).GetMethod("FallingDown", BindingFlags.NonPublic | BindingFlags.Instance);
+
+        Vector3 position = go.transform.position;
+        IEnumerator ie = (IEnumerator) FallingDown.Invoke(t, null);
+        t.StartCoroutine(ie);
+
+        for (int i = 0; i < 10; i++)
+            yield return new WaitForEndOfFrame(); //Wait a few frames
+
+        Assert.IsTrue(position.y > go.transform.position.y);
     }
 
     //Checks line clearing function selects correct lines
